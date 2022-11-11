@@ -1,4 +1,4 @@
-package com.mprog.service.userDetails;
+package com.mprog.service.user;
 
 import com.mprog.database.model.User;
 import com.mprog.database.repository.UserRepository;

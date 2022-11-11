@@ -1,4 +1,4 @@
-package com.mprog.service.userDetails;
+package com.mprog.service.user;
 
 import java.io.Serial;
 import java.util.Collection;

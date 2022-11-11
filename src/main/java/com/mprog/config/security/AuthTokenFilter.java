@@ -8,10 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mprog.config.jwt.JwtUtils;
-import com.mprog.service.userDetails.UserDetailsServiceImpl;
+import com.mprog.service.user.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +28,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 	private final JwtUtils jwtUtils;
 	private final UserDetailsServiceImpl userDetailsService;
+
+	private static final String TOKEN_PREFIX = "Bearer ";
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
@@ -53,9 +56,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	}
 
 	private String parseJwt(HttpServletRequest request) {
-		String headerAuth = request.getHeader("Authorization");
+		String headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(TOKEN_PREFIX)) {
 			return headerAuth.substring(7);
 		}
 
