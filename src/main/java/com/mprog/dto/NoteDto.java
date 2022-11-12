@@ -19,7 +19,7 @@ public class NoteDto {
 
     private LocalDateTime updatedAt;
 
-    private boolean deleted = false;
+//    private boolean deleted;
 
 //    private UserReadDto user;
 }

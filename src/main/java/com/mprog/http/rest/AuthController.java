@@ -1,4 +1,4 @@
-package com.mprog.http;
+package com.mprog.http.rest;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -42,6 +42,7 @@ public class AuthController {
         return ResponseEntity.ok(
                 new JwtResponseDto(
                         jwt,
+                        true,
                         userDetails.getId(),
                         userDetails.getEmail(),
                         roles
@@ -53,11 +54,9 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequestDto signUpRequest) {
         if (!userService.registerUserIfUnique(signUpRequest)) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponseDto("Error: Email is already in use!"));
+            return ResponseEntity.badRequest().body(new MessageResponseDto(false, "Error: Email is already in use!"));
         }
-        return ResponseEntity.ok(new MessageResponseDto("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponseDto(true, "User registered successfully!"));
     }
 
 
