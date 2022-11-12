@@ -3,6 +3,7 @@ package com.mprog.config.security;
 import com.mprog.database.model.User;
 import com.mprog.database.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Collectors;
 
@@ -31,10 +33,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
-            throw new BadCredentialsException("1000");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No such user");
         }
         if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("1000");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The email address or password is incorrect");
         }
         return new UsernamePasswordAuthenticationToken(
                 user,

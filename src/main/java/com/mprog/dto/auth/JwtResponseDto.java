@@ -16,6 +16,7 @@ import java.util.Set;
 public class JwtResponseDto {
 
     private String token;
+    private boolean success;
     private Long id;
     private String email;
     private List<String> roles;

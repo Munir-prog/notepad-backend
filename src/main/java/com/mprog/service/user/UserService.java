@@ -46,6 +46,12 @@ public class UserService {
         }
 
         User user = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
+        if (user.getLastname() == null) {
+            user.setLastname("Unknown");
+        }
+        if (user.getFirstname() == null) {
+            user.setFirstname("Unknown");
+        }
         Set<Role> roles = processRoles(signUpRequest.getRoles());
 
         user.setRoles(roles);
