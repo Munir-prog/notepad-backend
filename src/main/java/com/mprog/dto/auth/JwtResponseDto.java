@@ -1,5 +1,6 @@
-package com.mprog.dto;
+package com.mprog.dto.auth;
 
+import com.mprog.database.model.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,10 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignupRequestDto {
+public class JwtResponseDto {
+
+    private String token;
+    private Long id;
     private String email;
-    private String password;
-    private Set<String> roles;
+    private List<String> roles;
 }

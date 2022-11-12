@@ -13,6 +13,10 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    mapstructVersion = "1.5.3.Final"
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -26,6 +30,10 @@ dependencies {
             // Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
             //'org.bouncycastle:bcprov-jdk15on:1.70',
             'io.jsonwebtoken:jjwt-jackson:0.11.5' // or 'io.jsonwebtoken:jjwt-gson:0.11.5' for gson
+
+    compileOnly "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
 
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 

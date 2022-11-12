@@ -4,10 +4,10 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.mprog.database.model.User;
-import com.mprog.dto.JwtResponseDto;
-import com.mprog.dto.LoginRequestDto;
-import com.mprog.dto.MessageResponseDto;
-import com.mprog.dto.SignupRequestDto;
+import com.mprog.dto.auth.JwtResponseDto;
+import com.mprog.dto.auth.LoginRequestDto;
+import com.mprog.dto.auth.MessageResponseDto;
+import com.mprog.dto.auth.SignupRequestDto;
 import com.mprog.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
