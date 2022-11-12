@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://localhost:5432/notepad
+    username: postgres
+    password: postgres
+server:
+  port: 8081
+
+mprog:
+  app:
+    jwtSecret: mprogSecretKey$mprogSecretKey$mprogSecretKey$mprogSecretKey$mprogSecretKey$mprogSecretKey
+    jwtExpirationMs: 86400000
