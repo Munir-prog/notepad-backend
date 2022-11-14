@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.mprog.utils.ResponseUtils.BAD_EMAIL_TYPE_REASON;
+
 @Getter
 @Setter
 @Entity
@@ -28,7 +30,7 @@ public class User {
 
     @NotBlank
     @Size(max = 50)
-    @Email
+    @Email(message = BAD_EMAIL_TYPE_REASON)
     private String email;
 
     @NotBlank

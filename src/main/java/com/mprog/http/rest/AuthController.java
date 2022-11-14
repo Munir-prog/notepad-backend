@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final UserService userService;
 
-    @PostMapping("/signin")
+    @PostMapping("/auth/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDto loginRequest) {
 
         var authentication = userService.processAuthentication(loginRequest);
@@ -51,12 +51,15 @@ public class AuthController {
     }
 
 
-    @PostMapping("/signup")
+    @PostMapping("/auth/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequestDto signUpRequest) {
-        if (!userService.registerUserIfUnique(signUpRequest)) {
-            return ResponseEntity.badRequest().body(new MessageResponseDto(false, "Error: Email is already in use!"));
-        }
+        userService.registerUserIfUnique(signUpRequest);
         return ResponseEntity.ok(new MessageResponseDto(true, "User registered successfully!"));
+    }
+
+    @PostMapping("/token/check")
+    public ResponseEntity<Boolean> checkUser() {
+        return ResponseEntity.ok(true);
     }
 
 

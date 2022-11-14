@@ -9,6 +9,7 @@ import com.mprog.database.repository.RoleRepository;
 import com.mprog.database.repository.UserRepository;
 import com.mprog.dto.auth.LoginRequestDto;
 import com.mprog.dto.auth.SignupRequestDto;
+import com.mprog.validation.UserValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,7 @@ public class UserService {
 
     private final JwtUtils jwtUtils;
     private final PasswordEncoder encoder;
+    private final UserValidation userValidation;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final CustomAuthenticationProvider customAuthenticationProvider;
@@ -40,23 +42,24 @@ public class UserService {
         return authentication;
     }
 
-    public boolean registerUserIfUnique(SignupRequestDto signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return false;
-        }
+    public void registerUserIfUnique(SignupRequestDto signUpRequest) {
+        userValidation.validateUserSignupRequest(signUpRequest);
 
         User user = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
+        processNotNullData(user);
+        Set<Role> roles = processRoles(signUpRequest.getRoles());
+
+        user.setRoles(roles);
+        userRepository.save(user);
+    }
+
+    private void processNotNullData(User user) {
         if (user.getLastname() == null) {
             user.setLastname("Unknown");
         }
         if (user.getFirstname() == null) {
             user.setFirstname("Unknown");
         }
-        Set<Role> roles = processRoles(signUpRequest.getRoles());
-
-        user.setRoles(roles);
-        userRepository.save(user);
-        return true;
     }
 
     public String generateJwtToken(UsernamePasswordAuthenticationToken authentication) {

@@ -2,6 +2,7 @@ package com.mprog.config.security;
 
 import com.mprog.database.model.User;
 import com.mprog.database.repository.UserRepository;
+import com.mprog.validation.UserValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder bCryptPasswordEncoder;
+    private final UserValidation userValidation;
 
     @Override
     public UsernamePasswordAuthenticationToken authenticate(Authentication authentication)
@@ -31,13 +32,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
 
 
-        User user = userRepository.findByEmail(email).orElse(null);
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No such user");
-        }
-        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The email address or password is incorrect");
-        }
+        User user = userRepository.getByEmail(email);
+        userValidation.validateUserLoginRequest(user, password);
+
+
         return new UsernamePasswordAuthenticationToken(
                 user,
                 null,
