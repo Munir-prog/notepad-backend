@@ -22,7 +22,7 @@ public class NoteController {
         return new ResponseEntity<>(noteService.getNotes(), HttpStatus.OK);
     }
 
-    @GetMapping("/save")
+    @PostMapping("/save")
     public ResponseEntity<Boolean> saveNote(@RequestBody NoteDto noteDto) {
         return new ResponseEntity<>(noteService.saveNote(noteDto), HttpStatus.OK);
     }

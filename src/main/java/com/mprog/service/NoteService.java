@@ -8,6 +8,7 @@ import com.mprog.dto.NoteDto;
 import com.mprog.mapper.NoteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,9 +30,13 @@ public class NoteService {
     }
 
 
+    @Transactional
     public boolean saveNote(NoteDto noteDto) {
-        var note = noteRepository.findById(noteDto.getId())
-                .orElse(new Note());
+        var note = new Note();
+        if (noteDto.getId() != null) {
+            note = noteRepository.findById(noteDto.getId())
+                    .orElse(note);
+        }
         note.setText(noteDto.getText());
         note.setTittle(noteDto.getTittle());
 
@@ -41,6 +46,7 @@ public class NoteService {
             note.setCreatedAt(LocalDateTime.now());
             note.setUser(UserContextHolder.getUser());
         }
+        noteRepository.save(note);
         return true;
     }
 }
