@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NoteDto {
 
+    private Long id;
+
     private String tittle;
 
     private String text;

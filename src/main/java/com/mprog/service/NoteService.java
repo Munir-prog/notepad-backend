@@ -1,17 +1,16 @@
 package com.mprog.service;
 
-import com.mprog.config.jwt.JwtUtils;
+import com.mprog.context.UserContextHolder;
+import com.mprog.database.model.Note;
 import com.mprog.database.model.User;
 import com.mprog.database.repository.NoteRepository;
-import com.mprog.database.repository.UserRepository;
 import com.mprog.dto.NoteDto;
 import com.mprog.mapper.NoteMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,17 +19,28 @@ public class NoteService {
 
     private final NoteMapper noteMapper;
     private final NoteRepository noteRepository;
-    private final UserRepository userRepository;
 
     public List<NoteDto> getNotes() {
-        var user = userRepository.findByEmail(
-                SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getName()
-        ).orElse(null);
+        User user = UserContextHolder.getUser();
         return noteRepository.findAllByUser(user)
                 .stream()
                 .map(noteMapper::entityToDTO)
                 .collect(Collectors.toList());
+    }
+
+
+    public boolean saveNote(NoteDto noteDto) {
+        var note = noteRepository.findById(noteDto.getId())
+                .orElse(new Note());
+        note.setText(noteDto.getText());
+        note.setTittle(noteDto.getTittle());
+
+        if (noteDto.getId() != null) {
+            note.setUpdatedAt(LocalDateTime.now());
+        } else {
+            note.setCreatedAt(LocalDateTime.now());
+            note.setUser(UserContextHolder.getUser());
+        }
+        return true;
     }
 }
